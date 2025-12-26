@@ -1,6 +1,13 @@
 #pragma once
 #include <filesystem>
+#include "ItemType.h"
 
 struct Item {
-	std::filesystem::path path;
+	ItemType type;
+	std::filesystem::path absolutePath;
+
+	Item(std::filesystem::path ap, ItemType t) : 
+		absolutePath(ap), 
+		type(t) {
+	}
 };
