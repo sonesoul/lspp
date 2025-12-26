@@ -2,4 +2,10 @@
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories("include")
 project ("lspp")
-add_executable (lspp "src/lspp.cpp"  "include/sorting.h" "include/Item.h")
+
+file (GLOB_RECURSE SRC_FILES 
+	"include/*.h"
+	"include/*.hpp"
+	"src/*.cpp")
+
+add_executable (lspp ${SRC_FILES})
