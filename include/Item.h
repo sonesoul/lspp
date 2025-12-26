@@ -1,13 +1,46 @@
 #pragma once
 #include <filesystem>
-#include "ItemType.h"
 
-struct Item {
-	ItemType type;
-	std::filesystem::path absolutePath;
+using ItemType = std::filesystem::file_type;
+using Path = std::filesystem::path;
+using DirectoryEntry = std::filesystem::directory_entry;
 
-	Item(std::filesystem::path ap, ItemType t) : 
-		absolutePath(ap), 
-		type(t) {
+class Item {
+	DirectoryEntry _entry;
+	Path _path;
+	ItemType _type;
+	std::string _name;
+	bool _isValid;
+
+public:
+	Item(Path p) {
+		try {
+			_entry = DirectoryEntry(p);
+			_path = std::filesystem::absolute(_entry.path());
+			_type = _entry.status().type();
+			_name = path().filename().string();
+
+			_isValid = true;
+		}
+		catch (...) {
+			_path = Path("");
+			_type = ItemType::unknown;
+			_name = "";
+			
+			_isValid = false;
+		}
+	}
+
+	inline std::string name() const {
+		return _name;
+	}
+	inline bool isValid() const {
+		return _isValid;
+	}
+	inline ItemType type() const {
+		return _type;
+	}
+	inline Path path() const {
+		return _path;
 	}
 };
