@@ -2,8 +2,8 @@
 
 using namespace std;
 
-int main(int argCount, char* argValues[])
-{
-	std::cout << "Hello, lspp! \n";
+int main(int argCount, char* argValues[]) {
+	setlocale(LC_ALL, "");
+	
 	return 0;
 }
