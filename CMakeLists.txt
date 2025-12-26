@@ -1,4 +1,5 @@
 ﻿set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+include_directories("include")
 project ("lspp")
-add_executable (lspp "lspp.cpp" )
+add_executable (lspp "src/lspp.cpp"  "include/sorting.h" "include/Item.h")
