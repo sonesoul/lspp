@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Sorting.h"
 
-void partition(std::vector<Item>& vec, Comparer cmp, size_t start, size_t end) {
+void quickSort(std::vector<Item>& vec, Comparer cmp, size_t start, size_t end) {
 
 	if (start >= end)
 		return;
@@ -18,11 +18,11 @@ void partition(std::vector<Item>& vec, Comparer cmp, size_t start, size_t end) {
 	
 	std::swap(vec[left], vec[end]);
 
-	partition(vec, cmp, start, left - 1);
-	partition(vec, cmp, left + 1, end);
+	quickSort(vec, cmp, start, left - 1);
+	quickSort(vec, cmp, left + 1, end);
 }
 
 void DirectorySorter::Sort(Directory& dir, const Comparer& cmp) {
 	std::vector<Item>& vec = dir.vec();
-	partition(vec, cmp, 0, vec.size() - 1);
+	quickSort(vec, cmp, 0, vec.size() - 1);
 }
