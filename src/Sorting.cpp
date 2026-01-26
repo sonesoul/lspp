@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Sorting.h"
 
-void quickSort(std::vector<Item>& vec, Comparer cmp, size_t start, size_t end) {
+static void quickSort(std::vector<Item>& vec, Comparer cmp, size_t start, size_t end) {
 
 	if (start >= end)
 		return;
