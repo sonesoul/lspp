@@ -38,7 +38,7 @@ public:
 		};
 			
 		_creator = has(Reversed) ? rcreator : creator;
-		_typeComparator = has(DoubleReversed) ? rtypecmp : typecmp;
+		_typeComparator = has(TypeReversed) ? rtypecmp : typecmp;
 	};
 
 	bool has(sort_flags flag) const {

@@ -11,7 +11,7 @@ int main(int argCount, char* argValues[]) {
 	setlocale(LC_ALL, "");
 
 	Directory dir(Path("D:\\"));
-	SortContext order = SortContext(priority::byName, (sort_flags)(CaseSensitive | DoubleReversed | Reversed));
+	SortContext order = SortContext(priority::byName, (sort_flags)(CaseSensitive | TypeReversed | Reversed));
 
 	dir.sort(order);
 
