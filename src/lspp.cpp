@@ -2,7 +2,6 @@
 #include <iostream>
 #include <filesystem>
 #include "Directory.h"
-#include "Sorting.h"
 #include "priority.h"
 #include "icu.h"
 
@@ -12,12 +11,20 @@ int main(int argCount, char* argValues[]) {
 	setlocale(LC_ALL, "");
 
 	Directory dir(Path("D:\\"));
-	DirectorySorter sorter = DirectorySorter();
-	
-	sorter.Sort(dir, priority::byName);
+	SortContext order = SortContext(priority::byName, (sort_flags)(CaseSensitive | DoubleReversed | Reversed));
 
-	for (auto& i : dir.vec()) {
-		cout << i.name() << '\n';
+	dir.sort(order);
+
+	vector<Item>& items = dir.vec();
+ 
+	for (size_t i = 0; i < items.size(); i++)
+	{
+		Item& item = items[i];
+		if (item.type() == ItemType::directory)
+			cout << "[] ";
+		else
+			cout << "-- ";
+		cout << item.name() << "\n";
 	}
 
 	return 0;

@@ -2,7 +2,7 @@
 #include "Item.h"
 
 namespace priority {
-	bool byName(const Item&, const Item&);
-	bool bySize(const Item&, const Item&);
-	bool byDate(const Item&, const Item&);
+	bool byName(cmp_pair);
+	bool bySize(cmp_pair);
+	bool byDate(cmp_pair);
 }
