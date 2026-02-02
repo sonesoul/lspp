@@ -1,6 +1,6 @@
-﻿#include "Item.h"
+﻿#include <filesystem>
 #include <iostream>
-#include <filesystem>
+#include "Item.h"
 #include "Directory.h"
 #include "priority.h"
 #include "icu.h"
@@ -10,8 +10,10 @@ using namespace std;
 int main(int argCount, char* argValues[]) {
 	setlocale(LC_ALL, "");
 
-	Directory dir(Path("D:\\"));
-	SortContext order = SortContext(priority::byName, (sort_flags)(CaseSensitive | TypeReversed | Reversed));
+	auto base = std::filesystem::current_path();
+
+	Directory dir(base);
+	SortContext order = SortContext(priority::byName, (sort_flags)(None));
 
 	dir.sort(order);
 

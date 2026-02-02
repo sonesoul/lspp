@@ -18,7 +18,7 @@ namespace priority {
 		return result;
 	}
 
-	bool byName(cmp_pair pair) {
+	bool byName(const cmp_pair& pair) {
 		utf8proc_option_t opt = (utf8proc_option_t)(UTF8PROC_STABLE | UTF8PROC_COMPOSE);
 
 		if ((pair.order & CaseSensitive) == 0) {
@@ -27,10 +27,10 @@ namespace priority {
 
 		return sortKey(pair.a.name(), opt) < sortKey(pair.b.name(), opt);
 	}
-	bool bySize(cmp_pair pair) {
+	bool bySize(const cmp_pair& pair) {
 		return false;
 	}
-	bool byDate(cmp_pair pair) {
+	bool byDate(const cmp_pair& pair) {
 		return false;
 	}
 }

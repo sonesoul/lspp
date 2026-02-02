@@ -8,7 +8,7 @@
 class SortContext {
 
 private:
-	using Predicate = std::function<bool(cmp_pair)>;
+	using Predicate = std::function<bool(cmp_pair&)>;
 	using PairCreator = std::function<cmp_pair(const Item& a, const Item& b)>;
 	
 	PairCreator _creator;
@@ -31,10 +31,10 @@ public:
 		};
 
 		Predicate typecmp = [this](cmp_pair pair) {
-			return pair.b.type() == ItemType::directory;
+			return pair.a.type() == ItemType::directory;
 		};
 		Predicate rtypecmp = [this](cmp_pair pair) {
-			return pair.a.type() == ItemType::directory;
+			return pair.b.type() == ItemType::directory;
 		};
 			
 		_creator = has(Reversed) ? rcreator : creator;
@@ -46,12 +46,11 @@ public:
 	}
 
 	bool compare(const Item& a, const Item& b) const {
-		cmp_pair pair = _creator(a, b);
 
 		if (a.type() != b.type())
-			return _typeComparator(pair);
+			return _typeComparator(cmp_pair(a, b, _flags));
 
-		return _fn(pair);
+		return _fn(_creator(a, b));
 	}
 
 private:
