@@ -1,14 +1,14 @@
 #pragma once
 
 class Item;
-enum sort_flags : unsigned int;
+enum lspp_flag : unsigned int;
 
 struct cmp_pair {
 	const Item& a;
 	const Item& b;
-	const sort_flags& order;
+	const lspp_flag& order;
 
-	cmp_pair(const Item& a, const Item& b, const sort_flags& order) : 
+	cmp_pair(const Item& a, const Item& b, const lspp_flag& order) : 
 		a(a), b(b), order(order) {
 	}
 };

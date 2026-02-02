@@ -1,7 +1,7 @@
 #pragma once
 using u32 = unsigned int;
 
-enum sort_flags : u32 {
+enum lspp_flag : u32 {
 	None		   = 0,
 	Reversed	   = 1 << 1,
 	TypeReversed   = 1 << 2,

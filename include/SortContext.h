@@ -16,10 +16,10 @@ private:
 	Predicate _fn;
 	Predicate _typeComparator;
 
-	sort_flags _flags;
+	lspp_flag _flags;
 
 public:
-	SortContext(Predicate fn, sort_flags params) : 
+	SortContext(Predicate fn, lspp_flag params) : 
 		_fn(fn),
 		_flags(params) {
 		
@@ -41,7 +41,7 @@ public:
 		_typeComparator = has(TypeReversed) ? rtypecmp : typecmp;
 	};
 
-	bool has(sort_flags flag) const {
+	bool has(lspp_flag flag) const {
 		return (toNum(_flags) & toNum(flag)) != 0;
 	}
 
@@ -54,7 +54,7 @@ public:
 	}
 
 private:
-	inline u32 toNum(sort_flags flags) const {
+	inline u32 toNum(lspp_flag flags) const {
 		return (u32)flags;
 	}
 };

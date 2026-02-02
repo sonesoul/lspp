@@ -13,7 +13,7 @@ int main(int argCount, char* argValues[]) {
 	auto base = std::filesystem::current_path();
 
 	Directory dir(base);
-	SortContext order = SortContext(priority::byName, (sort_flags)(None));
+	SortContext order = SortContext(priority::byName, (lspp_flag)(None));
 
 	dir.sort(order);
 
