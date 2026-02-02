@@ -5,7 +5,7 @@
 #include "quick_sort.h"
 
 class Directory {
-	std::vector<Item> _entries;
+	std::vector<Item> _items;
 
 public: 
 	Directory(const Path& path) {
@@ -16,15 +16,15 @@ public:
 			if (!item.isValid())
 				continue;
 			
-			_entries.push_back(item);
+			_items.push_back(item);
 		}
 	}
 
 	inline void sort(const SortContext& order) {
-		quick_sort(&_entries[0], &_entries[_entries.size() - 1], order);
+		quick_sort(&_items[0], &_items[_items.size() - 1], order);
 	}
 
 	inline std::vector<Item>& vec() {
-		return _entries;
+		return _items;
 	}
 };
