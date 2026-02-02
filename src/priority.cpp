@@ -1,7 +1,7 @@
 #include <utf8proc.h>
 #include "cmp_pair.h"
 #include "priority.h"
-#include "sort_flags.h"
+#include "lspp_flag.h"
 
 using std::string;
 

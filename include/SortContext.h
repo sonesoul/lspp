@@ -1,7 +1,7 @@
 #pragma once
 #include <functional>
 #include "Item.h"
-#include "sort_flags.h"
+#include "lspp_flag.h"
 #include <iostream>
 #include "cmp_pair.h"
 
