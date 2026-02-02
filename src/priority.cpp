@@ -6,13 +6,13 @@
 using std::string;
 
 namespace priority {
-	
-	static std::string sortKey(const std::string& s, utf8proc_option_t opt) {
+
+	static std::string sort_key(const std::string& s, utf8proc_option_t opt) {
 		utf8proc_uint8_t* out = nullptr;
 		utf8proc_map((const utf8proc_uint8_t*)s.c_str(), s.size(), &out, opt);
 
 		std::string result = out ? std::string((char*)out) : std::string(s);
-		
+
 		free(out);
 
 		return result;
@@ -25,10 +25,10 @@ namespace priority {
 			opt = (utf8proc_option_t)(opt | UTF8PROC_CASEFOLD);
 		}
 
-		return sortKey(pair.a.name(), opt) < sortKey(pair.b.name(), opt);
+		return sort_key(pair.a.name(), opt) < sort_key(pair.b.name(), opt);
 	}
 	bool bySize(const cmp_pair& pair) {
-		return false;
+		return pair.a.size() < pair.b.size();
 	}
 	bool byDate(const cmp_pair& pair) {
 		return false;

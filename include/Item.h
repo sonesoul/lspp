@@ -11,6 +11,7 @@ class Item {
 	ItemType _type;
 	std::string _name;
 	bool _isValid;
+	uintmax_t _size;
 
 public:
 	Item(Path p) {
@@ -19,6 +20,7 @@ public:
 			_path = std::filesystem::absolute(_entry.path());
 			_type = _entry.status().type();
 			_name = path().filename().string();
+			_size = std::filesystem::file_size(_entry);
 
 			_isValid = true;
 		}
@@ -42,5 +44,8 @@ public:
 	}
 	inline Path path() const {
 		return _path;
+	}
+	inline uintmax_t size() const { 
+		return _size;
 	}
 };
