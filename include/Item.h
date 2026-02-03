@@ -10,8 +10,8 @@ class Item {
 	Path _path;
 	ItemType _type;
 	std::string _name;
-	bool _isValid;
 	uintmax_t _size;
+	bool _isValid;
 
 public:
 	Item(Path p) {
@@ -20,7 +20,7 @@ public:
 			_path = std::filesystem::absolute(_entry.path());
 			_type = _entry.status().type();
 			_name = path().filename().string();
-			_size = std::filesystem::file_size(_entry);
+			_size = _type != ItemType::directory ? std::filesystem::file_size(_entry) : 0;
 
 			_isValid = true;
 		}
@@ -33,7 +33,7 @@ public:
 		}
 	}
 
-	inline std::string name() const {
+	inline const std::string& name() const {
 		return _name;
 	}
 	inline bool isValid() const {
@@ -42,10 +42,14 @@ public:
 	inline ItemType type() const {
 		return _type;
 	}
-	inline Path path() const {
+	inline const Path& path() const {
 		return _path;
 	}
 	inline uintmax_t size() const { 
+		return _size;
+	}
+
+	inline uintmax_t& size() {
 		return _size;
 	}
 };
