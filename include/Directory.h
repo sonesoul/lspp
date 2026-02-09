@@ -3,37 +3,21 @@
 #include "Item.h"
 #include "SortContext.h"
 #include "quick_sort.h"
+#include "strategy/size/SizeStrategy.h"
 
 class Directory {
 	std::vector<Item> _items;
 
 public: 
-	Directory(const Path& path, lspp_flag flags) {
+	Directory(const Path& path, SizeStrategy& size) {
 		
-		namespace fs = std::filesystem;
-		bool recursive = (flags & lspp_flag::RecursiveSize) != 0;
-		
-		for (auto& it : fs::directory_iterator(path)) {
+		for (auto& it : std::filesystem::directory_iterator(path)) {
 			Item item = Item(it.path());
 			
 			if (!item.isValid())
 				continue;
-
-			if (recursive && item.type() == ItemType::directory) {
-				std::error_code ec;
-				uintmax_t size = 0;
-
-				auto iterator = fs::recursive_directory_iterator(
-					item.path(),
-					fs::directory_options::skip_permission_denied,
-					ec);
-
-				for (auto& it : iterator) {
-					size += it.file_size();
-				}
-
-				item.size() = size;
-			}
+			
+			item.size() = size(item);
 
 			_items.push_back(item);
 		}

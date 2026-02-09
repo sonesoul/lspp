@@ -12,7 +12,7 @@ class Item {
 	std::string _name;
 	uintmax_t _size;
 	bool _isValid;
-
+	
 public:
 	Item(Path p) {
 		try {
@@ -20,7 +20,7 @@ public:
 			_path = std::filesystem::absolute(_entry.path());
 			_type = _entry.status().type();
 			_name = path().filename().string();
-			_size = _type != ItemType::directory ? std::filesystem::file_size(_entry) : 0;
+			_size = 0;
 
 			_isValid = true;
 		}

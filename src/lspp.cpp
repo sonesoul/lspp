@@ -4,6 +4,7 @@
 #include "Directory.h"
 #include "priority.h"
 #include "icu.h"
+#include "strategy/size.h"
 
 using namespace std;
 
@@ -14,8 +15,10 @@ int main(int argCount, char* argValues[]) {
 
 	lspp_flag flags = (lspp_flag)(RecursiveSize);
 
-	Directory dir(base, flags);
-	SortContext ctx = SortContext(priority::byName, flags);
+	size::Recursive strat{};
+
+	Directory dir(base, strat);
+	SortContext ctx = SortContext(priority::bySize, flags);
 
 	vector<Item>& items = dir.vec();
 
@@ -28,7 +31,7 @@ int main(int argCount, char* argValues[]) {
 			cout << "[] ";
 		else
 			cout << "-- ";
-		cout << item.name() << "\n";
+		cout << item.name() << " : " << item.size() << "\n";
 	}
 
 	return 0;
