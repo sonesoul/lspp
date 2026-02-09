@@ -28,7 +28,7 @@ namespace priority {
 		return sort_key(pair.a.name(), opt) < sort_key(pair.b.name(), opt);
 	}
 	bool bySize(const cmp_pair& pair) {
-		return pair.a.size() < pair.b.size();
+		return pair.a.size() > pair.b.size();
 	}
 	bool byDate(const cmp_pair& pair) {
 		return false;
