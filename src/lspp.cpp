@@ -2,7 +2,8 @@
 #include <iostream>
 #include "Item.h"
 #include "Directory.h"
-#include "icu.h"
+#include "SortContext.h"
+
 #include "strategy/size.h"
 #include "strategy/adapter.h"
 #include "strategy/predicate.h"
@@ -19,17 +20,17 @@ int main(int argCount, char* argValues[]) {
 		new size::Discard());
 
 	SortContext ctx = SortContext(
-		new predicate::ByNameCS(), 
+		new predicate::BySize(), 
 		new adapter::Normal(), 
-		new type::DirectoriesFirst());
+		new type::Discard());
 
-	vector<Item>& items = dir.vec();
+	vector<Item*>& items = dir.vec();
 
-	std::sort(items.begin(), items.end(), [&](const Item& a, const Item& b) { return ctx.compare(a, b); });
+	std::sort(items.begin(), items.end(), [&](const Item* a, const Item* b) { return ctx.compare(*a, *b); });
 
 	for (size_t i = 0; i < items.size(); i++)
 	{
-		Item& item = items[i];
+		Item& item = *items[i];
 		if (item.type() == ItemType::directory)
 			cout << "[] ";
 		else
