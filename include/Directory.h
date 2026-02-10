@@ -2,7 +2,6 @@
 #include <vector>
 #include "Item.h"
 #include "SortContext.h"
-#include "quick_sort.h"
 #include "strategy/size/SizeStrategy.h"
 
 class Directory {

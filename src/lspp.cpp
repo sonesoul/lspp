@@ -25,7 +25,7 @@ int main(int argCount, char* argValues[]) {
 
 	vector<Item>& items = dir.vec();
 
-	quick_sort(&items[0], &items[items.size() - 1], ctx);
+	std::sort(items.begin(), items.end(), [&](const Item& a, const Item& b) { return ctx.compare(a, b); });
 
 	for (size_t i = 0; i < items.size(); i++)
 	{
