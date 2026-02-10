@@ -1,40 +1,29 @@
 #pragma once
-#include <functional>
 #include "Item.h"
-#include "lspp_flag.h"
-#include <iostream>
-#include "cmp_pair.h"
+#include "strategy/predicate/PredicateStrategy.h"
+#include "strategy/type/TypeStrategy.h"
+#include "strategy/adapter/ComparisonAdapter.h"
 
 class SortContext {
 
 private:
-	using Predicate = std::function<bool(cmp_pair&)>;
+	PredicateStrategy* _cmp;
+	TypeStrategy* _typecmp;
+	ComparisonAdapter* _adapter;
 	
-	Predicate _fn;
-	
-	lspp_flag _flags;
-
 public:
-	SortContext(Predicate fn, lspp_flag params) : 
-		_fn(fn),
-		_flags(params) {
+	SortContext(PredicateStrategy* cmp, ComparisonAdapter* adapter, TypeStrategy* typecmp) : 
+		_cmp(cmp),
+		_typecmp(typecmp), 
+		_adapter(adapter) {
 	};
-
-	bool has(lspp_flag flag) const {
-		return (_flags & flag) != 0;
-	}
 
 	bool compare(const Item& a, const Item& b) const {
 
-		if (a.type() != b.type()) {
-			return has(TypeReversed) 
-				? b.type() == ItemType::directory 
-				: a.type() == ItemType::directory;
+		if (_typecmp->applicable(a, b)) {
+			return (*_typecmp)(a, b);
 		}
-		else {
-			return _fn(has(Reversed) 
-				? cmp_pair(b, a, _flags) 
-				: cmp_pair(a, b, _flags));
-		}
+
+		return (*_adapter)(a, b, _cmp);
 	}
 };

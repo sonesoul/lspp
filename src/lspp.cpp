@@ -2,9 +2,11 @@
 #include <iostream>
 #include "Item.h"
 #include "Directory.h"
-#include "priority.h"
 #include "icu.h"
 #include "strategy/size.h"
+#include "strategy/adapter.h"
+#include "strategy/predicate.h"
+#include "strategy/type.h"
 
 using namespace std;
 
@@ -18,7 +20,7 @@ int main(int argCount, char* argValues[]) {
 	size::Recursive strat{};
 
 	Directory dir(base, strat);
-	SortContext ctx = SortContext(priority::bySize, flags);
+	SortContext ctx = SortContext(new predicate::ByNameCS(), new adapter::Normal(), new type::DirectoriesFirst());
 
 	vector<Item>& items = dir.vec();
 
