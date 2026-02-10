@@ -9,15 +9,15 @@ class Directory {
 	std::vector<Item> _items;
 
 public: 
-	Directory(const Path& path, SizeStrategy& size) {
+	Directory(const Path& path, SizeStrategy* size) {
 		
 		for (auto& it : std::filesystem::directory_iterator(path)) {
-			Item item = Item(it.path());
+			Item item{};
 			
-			if (!item.isValid())
+			if (!item.tryInit(it.path()))
 				continue;
 			
-			item.size() = size(item);
+			item.size() = (*size)(item);
 
 			_items.push_back(item);
 		}

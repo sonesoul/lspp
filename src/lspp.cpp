@@ -15,17 +15,18 @@ int main(int argCount, char* argValues[]) {
 
 	auto base = std::filesystem::current_path();
 
-	lspp_flag flags = (lspp_flag)(RecursiveSize);
+	Directory dir(base, 
+		new size::Discard());
 
-	size::Recursive strat{};
-
-	Directory dir(base, strat);
-	SortContext ctx = SortContext(new predicate::ByNameCS(), new adapter::Normal(), new type::DirectoriesFirst());
+	SortContext ctx = SortContext(
+		new predicate::ByNameCS(), 
+		new adapter::Normal(), 
+		new type::DirectoriesFirst());
 
 	vector<Item>& items = dir.vec();
 
 	quick_sort(&items[0], &items[items.size() - 1], ctx);
- 
+
 	for (size_t i = 0; i < items.size(); i++)
 	{
 		Item& item = items[i];
