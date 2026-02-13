@@ -1,8 +1,8 @@
 #pragma once
 #include "Item.h"
-#include "strategy/Strategy.h"
 
-class SizeStrategy : Strategy {
+class SizeStrategy {
 public:
+	virtual ~SizeStrategy() = default;
 	virtual uintmax_t operator()(Item&) = 0;
 };

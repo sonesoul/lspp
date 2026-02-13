@@ -1,9 +1,9 @@
 #pragma once
-#include "strategy/Strategy.h"
 
 class Item;
 
-class PredicateStrategy : Strategy {
+class PredicateStrategy {
 public:
+	virtual ~PredicateStrategy() = default;
 	virtual bool operator()(const Item&, const Item&) = 0;
 };

@@ -1,10 +1,10 @@
 #pragma once
-#include "strategy/Strategy.h"
 
 class PredicateStrategy;
 class Item;
 
-class ComparisonAdapter : public Strategy {
+class ComparisonAdapter {
 public:
+	virtual ~ComparisonAdapter() = default;
 	virtual bool operator()(const Item&, const Item&, PredicateStrategy* str) = 0;
 };
