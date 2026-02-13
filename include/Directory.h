@@ -23,6 +23,12 @@ public:
 		}
 	}
 
+	~Directory() {
+		for (auto& i : _items) {
+			delete i;
+		}
+	}
+
 	inline std::vector<Item*>& vec() {
 		return _items;
 	}

@@ -2,10 +2,9 @@
 #include <iostream>
 #include "Item.h"
 #include "Directory.h"
-#include "SortContext.h"
+#include "Comparator.h"
 
 #include "strategy/size.h"
-#include "strategy/adapter.h"
 #include "strategy/predicate.h"
 #include "strategy/type.h"
 
@@ -16,17 +15,14 @@ int main(int argCount, char* argValues[]) {
 
 	auto base = std::filesystem::current_path();
 
-	Directory dir(base, 
-		new size::Discard());
+	Directory dir(base, new size::Discard());
 
-	SortContext ctx = SortContext(
-		new predicate::BySize(), 
-		new adapter::Normal(), 
-		new type::Discard());
+	auto tc = new type::Discard();
+	auto pr = new predicate::BySize();
 
 	vector<Item*>& items = dir.vec();
 
-	std::sort(items.begin(), items.end(), [&](const Item* a, const Item* b) { return ctx.compare(*a, *b); });
+	std::sort(items.begin(), items.end(), [&](const Item* a, const Item* b) { return cmp::normal(*a, *b, tc, pr); });
 
 	for (size_t i = 0; i < items.size(); i++)
 	{
