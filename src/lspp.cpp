@@ -1,12 +1,13 @@
 ﻿#include <filesystem>
 #include <iostream>
 #include "Item.h"
-#include "Directory.h"
-#include "Comparator.h"
 
-#include "strategy/size.h"
-#include "strategy/predicate.h"
-#include "strategy/type.h"
+#include "measure/all.h"
+#include "priority/all.h"
+#include "predicate/all.h"
+#include "compare/all.h"
+
+#include "fn/scan_directory.h"
 
 using namespace std;
 
@@ -15,18 +16,17 @@ int main(int argCount, char* argValues[]) {
 
 	auto base = std::filesystem::current_path();
 
-	Directory dir(base, new size::Discard());
+	auto prio = priority::directories;
+	auto pred = predicate::by_size;
+	auto meas = measure::recursive;
+	auto comp = compare::normal;
 
-	auto tc = new type::Discard();
-	auto pr = new predicate::BySize();
+	auto content = fn::scan_directory(base, meas);
+	std::sort(content.begin(), content.end(), [&](const auto& a, const auto& b) { return compare::normal(*a, *b, prio, pred); });
 
-	vector<Item*>& items = dir.vec();
-
-	std::sort(items.begin(), items.end(), [&](const Item* a, const Item* b) { return cmp::normal(*a, *b, tc, pr); });
-
-	for (size_t i = 0; i < items.size(); i++)
+	for (size_t i = 0; i < content.size(); i++)
 	{
-		Item& item = *items[i];
+		Item& item = *content[i];
 		if (item.type() == ItemType::directory)
 			cout << "[] ";
 		else

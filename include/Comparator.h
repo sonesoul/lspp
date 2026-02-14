@@ -1,5 +1,6 @@
 #pragma once
-#include "cmp/normal.h" 
-#include "cmp/reversed.h"
+#include "Predicate.h"
+#include "Prioritizer.h"
+#include "Item.h"
 
-using Comparator = bool(*)(const Item&, const Item&, TypeStrategy*, PredicateStrategy*);
+using Comparator = bool(*)(const Item&, const Item&, Prioritizer, Predicate);
