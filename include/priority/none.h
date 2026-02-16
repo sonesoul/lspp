@@ -4,7 +4,7 @@
 
 namespace priority {
 
-	std::optional<bool> discard(const Item& a, const Item& b) {
+	std::optional<bool> none(const Item& a, const Item& b) {
 		return std::nullopt;
 	}
 }
