@@ -8,7 +8,7 @@ namespace measure {
 
 		return 
 			itemType == ItemType::directory 
-			? std::filesystem::file_size(p)
-			: fn::directory_size(p);
+			? fn::directory_size(p) 
+			: std::filesystem::file_size(p);
 	}
 }

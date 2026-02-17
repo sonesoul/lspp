@@ -2,21 +2,21 @@
 #include "Item.h"
 
 namespace fn {
-	DirectoryContent scan_directory(Path path, Measurer measurer) {
+	std::vector<Item> scan_directory(Path path, Measurer measurer) {
 		namespace fs = std::filesystem;
 
-		DirectoryContent content{};
+		std::vector<Item> content{};
+		uintmax_t size = 0;
 
-		for (auto& it : fs::directory_iterator(path)) {
+		std::error_code ec;
+		for (auto& entry : fs::directory_iterator(path, fs::directory_options::skip_permission_denied, ec)) {
+			++size;
+		}
 
-			std::error_code ec;
-			auto entry = fs::directory_entry(it, ec);
+		content.reserve(size);
 
-			if (ec) {
-				continue;
-			}
-
-			content.push_back(std::make_unique<Item>(entry, measurer(it)));
+		for (auto& entry : fs::directory_iterator(path, fs::directory_options::skip_permission_denied, ec)) {
+			content.emplace_back(entry, measurer(entry));
 		}
 
 		return content;

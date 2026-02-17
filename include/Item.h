@@ -11,7 +11,7 @@ class Item {
 	uintmax_t _size;
 	
 public:
-	Item(Entry entry, uintmax_t size) : 
+	Item(const Entry& entry, uintmax_t size) : 
 		_size(size), 
 		_path(std::filesystem::absolute(entry.path())), 
 		_type(entry.status().type()) {

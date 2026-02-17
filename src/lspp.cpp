@@ -22,11 +22,11 @@ int main(int argCount, char* argValues[]) {
 	auto comp = compare::normal;
 
 	auto content = fn::scan_directory(base, meas);
-	std::sort(content.begin(), content.end(), [&](const auto& a, const auto& b) { return compare::normal(*a, *b, prio, pred); });
+	std::sort(content.begin(), content.end(), [&](const auto& a, const auto& b) { return comp(a, b, prio, pred); });
 
 	for (size_t i = 0; i < content.size(); i++)
 	{
-		Item& item = *content[i];
+		Item& item = content[i];
 		if (item.type() == ItemType::directory)
 			cout << "[] ";
 		else
