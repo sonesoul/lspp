@@ -3,7 +3,7 @@
 #include "fn/directory_size.h"
 
 namespace measure {
-	uintmax_t recursive(const std::filesystem::path& p) {
+	inline uintmax_t recursive(const std::filesystem::path& p) {
 		auto itemType = std::filesystem::status(p).type();
 
 		return 

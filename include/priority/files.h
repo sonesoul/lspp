@@ -4,7 +4,7 @@
 
 namespace priority {
 
-	std::optional<bool> files(const Item& a, const Item& b) {
+	inline std::optional<bool> files(const Item& a, const Item& b) {
 
 		if (a.type() != b.type()) {
 			return b.type() == ItemType::directory;

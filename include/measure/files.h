@@ -2,7 +2,7 @@
 #include <filesystem>
 
 namespace measure {
-	uintmax_t files(const std::filesystem::path& p) {
+	inline uintmax_t files(const std::filesystem::path& p) {
 		namespace fs = std::filesystem;
 
 		return fs::status(p).type() != fs::file_type::directory
