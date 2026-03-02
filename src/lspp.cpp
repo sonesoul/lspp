@@ -62,9 +62,9 @@ int main(int argc, char* argv[]) {
 		{
 			Item& item = content[i];
 			if (item.type() == ItemType::directory)
-				cout << "[] ";
+				std::cout << "[] ";
 			else
-				cout << "-- ";
+				std::cout << "-- ";
 
 			auto size = item.size();
 			size_t measureIndex = 0;
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
 				++measureIndex;
 			}
 
-			cout << item.name() << " : " << size << sizeMeasures[measureIndex] << "\n";
+			std::cout << item.name() << " : " << size << sizeMeasures[measureIndex] << "\n";
 		}
 
 	}
