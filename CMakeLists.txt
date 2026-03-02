@@ -9,6 +9,8 @@ file (GLOB_RECURSE SRC_FILES
 	"include/*.hpp"
 	"src/*.cpp")
 
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")
+
 include(FetchContent)
 
 FetchContent_Declare(
