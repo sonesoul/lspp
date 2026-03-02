@@ -13,8 +13,16 @@ class Item {
 public:
 	Item(const Entry& entry, uintmax_t size) : 
 		_size(size), 
-		_path(std::filesystem::absolute(entry.path())), 
-		_type(entry.status().type()) {
+		_path(std::filesystem::absolute(entry.path())) {
+
+		_type = ItemType::unknown;
+
+		std::error_code e;
+		auto status = entry.status(e);
+
+		if (!e) {
+			_type = status.type();
+		}
 	}
 
 	const Path& Item::path() const {
@@ -24,7 +32,7 @@ public:
 		return _type;
 	}
 	std::string Item::name() const {
-		return path().filename().string();
+		return path().filename().u8string();
 	}
 	uintmax_t Item::size() const {
 		return _size;

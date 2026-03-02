@@ -55,7 +55,6 @@ int main(int argc, char* argv[]) {
 
 		std::sort(content.begin(), content.end(), [&](const auto& a, const auto& b) { return comp(a, b, prio, pred); });
 
-
 		std::vector<std::string> sizeMeasures = { "B", "KB", "MB", "GB", "TB", "PB" };
 
 		for (size_t i = 0; i < content.size(); i++)

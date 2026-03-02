@@ -6,13 +6,22 @@ uintmax_t fn::directory_size(const std::filesystem::path p) {
 	std::error_code ec;
 	uintmax_t size = 0;
 
-	auto iterator = fs::recursive_directory_iterator(
+	auto it = fs::recursive_directory_iterator(
 		p,
 		fs::directory_options::skip_permission_denied,
 		ec);
 
-	for (auto& it : iterator) {
-		size += it.file_size();
+	fs::recursive_directory_iterator end;
+
+	for (; it != end; it.increment(ec)) {
+		if (ec) {
+			ec.clear();
+			continue;
+		}
+
+		if (it->is_regular_file(ec)) {
+			size += it->file_size(ec);
+		}
 	}
 
 	return size;

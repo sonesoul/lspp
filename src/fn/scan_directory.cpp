@@ -6,14 +6,14 @@ namespace fn {
 		namespace fs = std::filesystem;
 
 		std::vector<Item> content{};
-		uintmax_t size = 0;
+		uintmax_t itemCount = 0;
 
 		std::error_code ec;
 		for (auto& entry : fs::directory_iterator(path, fs::directory_options::skip_permission_denied, ec)) {
-			++size;
+			++itemCount;
 		}
 
-		content.reserve(size);
+		content.reserve(itemCount);
 
 		for (auto& entry : fs::directory_iterator(path, fs::directory_options::skip_permission_denied, ec)) {
 			content.emplace_back(entry, measurer(entry));
