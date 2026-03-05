@@ -15,7 +15,7 @@
 namespace fs = std::filesystem;
 
 int main(int argc, char* argv[]) {
-	
+
 	try
 	{
 		SetConsoleOutputCP(CP_UTF8);
@@ -51,8 +51,7 @@ int main(int argc, char* argv[]) {
 		auto comp = config.get<Comparator>();
 
 		auto content = fn::scan_directory(base, meas);
-		std::cout << content.size() << "\n";
-
+		
 		std::sort(content.begin(), content.end(), [&](const auto& a, const auto& b) { return comp(a, b, prio, pred); });
 
 		std::vector<std::string> sizeMeasures = { "B", "KB", "MB", "GB", "TB", "PB" };

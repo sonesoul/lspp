@@ -6,49 +6,34 @@
 #include "predicate/all.h"
 
 using ConfigSetter = void(*)(lspp_config&);
-using SetterMap = std::unordered_map<std::string_view, void(*)(lspp_config&)>;
+using SetterMap = std::unordered_map<std::string_view, ConfigSetter>;
+using StringKeys = std::initializer_list<std::string_view>;
 
-static void add_item(
-	std::unordered_map<std::string_view, void(*)(lspp_config&)>& map,
-	std::initializer_list<std::string_view> keys,
-	ConfigSetter fn) {
+template<auto obj> 
+void set(lspp_config& cfg) {
+	cfg.set(obj);
+}
 
+static void add_item(SetterMap& map, StringKeys keys, ConfigSetter setter) {
 	for (auto k : keys)
-		map[k] = fn;
+		map[k] = setter;
 }
 
 SetterMap fn::make_setter_map() {
 	SetterMap map{};
 
-	add_item(map, { "-reversed", "-rv" }, [](auto& cfg) {
-		cfg.set(compare::reversed); });
+	add_item(map, { "-reversed", "-rv" }, set<compare::reversed>);
 
+	add_item(map, { "--by-name-cs", "-cs" }, set<predicate::by_name_cs>);
+	add_item(map, { "--by-name-ci", "-ci" }, set<predicate::by_name_ci>);
+	add_item(map, { "--by-size", "-sz" }, set<predicate::by_size>);
+	
+	add_item(map, { "--no-measure", "-nm" }, set<measure::none>);
+	add_item(map, { "-recursive", "-rc" }, set<measure::recursive>);
 
-	add_item(map, { "--by-name-cs", "-cs" }, [](auto& cfg) {
-		cfg.set(predicate::by_name_cs); });
-
-	add_item(map, { "--by-name-ci", "-ci" }, [](auto& cfg) {
-		cfg.set(predicate::by_name_ci); });
-
-	add_item(map, { "--by-size", "-sz" }, [](auto& cfg) {
-		cfg.set(predicate::by_size); });
-
-
-	add_item(map, { "--no-measure", "-nm" }, [](auto& cfg) {
-		cfg.set(measure::none); });
-
-	add_item(map, { "-recursive", "-rc" }, [](auto& cfg) {
-		cfg.set(measure::recursive); });
-
-
-	add_item(map, { "--file-first", "-ff" }, [](auto& cfg) {
-		cfg.set(priority::files); });
-
-	add_item(map, { "--dir-first", "-df" }, [](auto& cfg) {
-		cfg.set(priority::directories); });
-
-	add_item(map, { "--no-priority", "-np" }, [](auto& cfg) {
-		cfg.set(priority::none); });
+	add_item(map, { "--file-first", "-ff" }, set<priority::files>);
+	add_item(map, { "--dir-first", "-df" }, set<priority::directories>);
+	add_item(map, { "--no-priority", "-np" }, set<priority::none>);
 
 	return map;
 }
