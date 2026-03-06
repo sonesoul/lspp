@@ -25,16 +25,16 @@ public:
 		}
 	}
 
-	const Path& Item::path() const {
+	const Path& path() const {
 		return _path;
 	}
-	ItemType Item::type() const {
+	ItemType type() const {
 		return _type;
 	}
-	std::string Item::name() const {
-		return path().filename().u8string();
+	Path filename() const {
+		return path().filename();
 	}
-	uintmax_t Item::size() const {
+	uintmax_t size() const {
 		return _size;
 	}
 };

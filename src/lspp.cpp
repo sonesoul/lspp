@@ -11,6 +11,7 @@
 #include "fn/scan_directory.h"
 #include "fn/make_setter_map.h"
 #include <windows.h>
+#include "fn/print_content.h"
 
 namespace fs = std::filesystem;
 
@@ -18,6 +19,9 @@ int main(int argc, char* argv[]) {
 
 	try
 	{
+		std::ios::sync_with_stdio(false);
+		std::cin.tie(nullptr);
+
 		SetConsoleOutputCP(CP_UTF8);
 		SetConsoleCP(CP_UTF8);
 
@@ -54,27 +58,7 @@ int main(int argc, char* argv[]) {
 		
 		std::sort(content.begin(), content.end(), [&](const auto& a, const auto& b) { return comp(a, b, prio, pred); });
 
-		std::vector<std::string> sizeMeasures = { "B", "KB", "MB", "GB", "TB", "PB" };
-
-		for (size_t i = 0; i < content.size(); i++)
-		{
-			Item& item = content[i];
-			if (item.type() == ItemType::directory)
-				std::cout << "[] ";
-			else
-				std::cout << "-- ";
-
-			auto size = item.size();
-			size_t measureIndex = 0;
-
-			while (size >= 1024 && measureIndex < sizeMeasures.size()) {
-				size /= 1024;
-				++measureIndex;
-			}
-
-			std::cout << item.name() << " : " << size << sizeMeasures[measureIndex] << "\n";
-		}
-
+		fn::print_content(content);
 	}
 	catch (const std::exception& ex)
 	{
