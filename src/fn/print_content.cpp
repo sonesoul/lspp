@@ -9,16 +9,59 @@
 
 constexpr size_t NAME_LENGTH_RESERVE = 20;
 constexpr size_t NAME_LEFT_PART = 8;
-constexpr size_t NAME_RIGHT_PART = 8;
+constexpr size_t NAME_RIGHT_PART = 9;
 
 constexpr size_t DATE_LENGTH_RESERVE = 10;
 constexpr size_t SIZE_LENGTH_RESERVE = 3;
+
+static size_t utf8_char_length(unsigned char c)
+{
+    if ((c & 0x80) == 0) return 1;
+    if ((c & 0xE0) == 0xC0) return 2;
+    if ((c & 0xF0) == 0xE0) return 3;
+    if ((c & 0xF8) == 0xF0) return 4;
+    return 1;
+}
+
+static size_t utf8_char_count(const std::string& str) {
+    size_t p = 0;
+    size_t count = 0;
+    while (p < str.size()) {
+        p += utf8_char_length(str[p]);
+        ++count;
+    }
+
+    return count;
+}
+
+static std::string substring(const std::string& str, size_t offset, size_t count) {
+    
+    size_t charCount = 0;
+    size_t p = 0;
+    size_t len = utf8_char_length((unsigned char)str[p]);
+    
+    std::string result{};
+
+    for (size_t i = 0; i < offset; ++i) {
+        p += utf8_char_length(str[p]);
+    }
+
+    for (; p < str.size() && charCount < count; ) {
+        charCount++;
+        char c = str[p];
+
+        result.append(str, p, len);
+        p += len;
+    }
+
+    return result;
+}
 
 static std::string get_human_size(uintmax_t size) {
     const std::vector<std::string> units =
     { "B", "KB", "MB", "GB", "TB", "PB" };
 
-    double step = 1024.9;
+    double step = 1024.0;
 
     double value = size;
     size_t unit = 0;
@@ -41,39 +84,12 @@ static std::string get_human_size(uintmax_t size) {
 }
 
 static std::string shorten_name(const std::string& str) {
-    if (str.length() <= NAME_LENGTH_RESERVE)
-        return str;
 
-    std::string ext;
-    std::string name_part;
+    std::string result{};
 
-    auto dotPos = str.find_last_of('.');
-    if (dotPos != std::string::npos) {
-        name_part = str.substr(0, dotPos);
-        ext = str.substr(dotPos);
-    }
-    else {
-        name_part = str;
-    }
-
-    size_t left = NAME_LEFT_PART;
-    size_t right = NAME_RIGHT_PART;
-
-    if (name_part.length() < left)
-        left = name_part.length();
-
-    if (ext.length() < right)
-        right = ext.length();
-
-    std::string result;
-
-    result += name_part.substr(0, left);
+    result += substring(str, 0, NAME_LEFT_PART);
     result += "...";
-
-    if (ext.length() > right)
-        result += ext.substr(ext.length() - right);
-    else
-        result += ext;
+    result += substring(str, utf8_char_count(str) - NAME_RIGHT_PART, NAME_RIGHT_PART);
 
     return result;
 }
@@ -89,7 +105,7 @@ static std::string format_time(std::filesystem::file_time_type ftime) {
     std::tm tm = *std::localtime(&ctime);
 
     char buf[64];
-    strftime(buf, sizeof(buf), "%m/%d/%Y", &tm);
+    strftime(buf, sizeof(buf), "%d/%m/%Y", &tm);
 
     return buf;
 }
@@ -102,19 +118,24 @@ void fn::print_content(std::vector<Item> content) {
         + DATE_LENGTH_RESERVE 
         + SIZE_LENGTH_RESERVE));
 
+    size_t totalSize = 0;
+    size_t fileNumber = 1;
+
     for (auto& item : content) {
 
         std::string name = item.filename().u8string();
-        if (name.length() > NAME_LENGTH_RESERVE)
-            name = shorten_name(name);
-
-        char* prefix = ". ";
-
-        if (item.type() == ItemType::directory) {
-            prefix = "] ";
-        }
         
-        name = prefix + name;
+        size_t namelen = utf8_char_count(name);
+
+        if (namelen > NAME_LENGTH_RESERVE)
+            name = shorten_name(name);
+        else
+            name.append(NAME_LENGTH_RESERVE - namelen, ' ');
+        
+        name = (item.type() == ItemType::directory 
+            ? "] " 
+            : ". ")
+            + name;
 
         std::string size = item.size() < 1
             ? "0 B"
@@ -124,17 +145,19 @@ void fn::print_content(std::vector<Item> content) {
             std::filesystem::last_write_time(item.path())
         );
 
-        char line[256];
+        std::string line {
+            name + "\t" +
+            date + "\t" +
+            size + "\n"
+        };
 
-        snprintf(line, sizeof(line),
-            "%-23s %s   %s\n",
-            name.c_str(),
-            date.c_str(),
-            size.c_str()
-        );
-        
+        totalSize += item.size();
         out += line;
     }
+
+    out += "\n";
+    out += get_human_size(totalSize) + " total by ";
+    out += std::to_string(content.size()) + " entries. \n";
 
     std::cout << out;
 }

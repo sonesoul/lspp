@@ -17,8 +17,7 @@ namespace fs = std::filesystem;
 
 int main(int argc, char* argv[]) {
 
-	try
-	{
+	try {
 		std::ios::sync_with_stdio(false);
 		std::cin.tie(nullptr);
 
@@ -47,8 +46,6 @@ int main(int argc, char* argv[]) {
 			}
 		}
 
-		std::cout << base.string() << "\n";
-
 		auto prio = config.get<Prioritizer>();
 		auto pred = config.get<Predicate>();
 		auto meas = config.get<Measurer>();
@@ -60,10 +57,9 @@ int main(int argc, char* argv[]) {
 
 		fn::print_content(content);
 	}
-	catch (const std::exception& ex)
-	{
+	catch (const std::exception& ex) {
 		std::cout << ex.what();
-		return 0;
 	}
+
 	return 0;
 }
