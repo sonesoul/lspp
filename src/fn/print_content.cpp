@@ -7,9 +7,11 @@
 #include <iostream>
 #include "fn/print_content.h"
 
-constexpr size_t NAME_LENGTH_RESERVE = 20;
-constexpr size_t NAME_LEFT_PART = 8;
-constexpr size_t NAME_RIGHT_PART = 9;
+constexpr size_t NAME_LENGTH_RESERVE = 24;
+
+// 3 less due to '...' adding
+constexpr size_t NAME_LEFT_PART = 11;
+constexpr size_t NAME_RIGHT_PART = 10;
 
 constexpr size_t DATE_LENGTH_RESERVE = 10;
 constexpr size_t SIZE_LENGTH_RESERVE = 3;
@@ -38,7 +40,6 @@ static std::string substring(const std::string& str, size_t offset, size_t count
     
     size_t charCount = 0;
     size_t p = 0;
-    size_t len = utf8_char_length((unsigned char)str[p]);
     
     std::string result{};
 
@@ -49,6 +50,8 @@ static std::string substring(const std::string& str, size_t offset, size_t count
     for (; p < str.size() && charCount < count; ) {
         charCount++;
         char c = str[p];
+
+        size_t len = utf8_char_length(str[p]);
 
         result.append(str, p, len);
         p += len;
@@ -119,7 +122,6 @@ void fn::print_content(std::vector<Item> content) {
         + SIZE_LENGTH_RESERVE));
 
     size_t totalSize = 0;
-    size_t fileNumber = 1;
 
     for (auto& item : content) {
 
@@ -146,9 +148,9 @@ void fn::print_content(std::vector<Item> content) {
         );
 
         std::string line {
-            name + "\t" +
-            date + "\t" +
-            size + "\n"
+            name + '\t' +
+            date + '\t' +
+            size + '\n'
         };
 
         totalSize += item.size();
