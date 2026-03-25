@@ -26,6 +26,7 @@ Measure directory sizes recursively
 
 Show files before directories  
 `--file-first` `-ff`  
+
 Show directories before files  
 `--dir-first` `-df`  
 
