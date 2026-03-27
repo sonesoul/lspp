@@ -2,7 +2,7 @@
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories("include")
-project ("lspp" VERSION 1.0.1)
+project ("lspp" VERSION 1.0.2)
 
 file (GLOB_RECURSE SRC_FILES 
 	"include/*.h"
